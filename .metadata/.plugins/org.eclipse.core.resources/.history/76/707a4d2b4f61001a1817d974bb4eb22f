@@ -1,0 +1,126 @@
+package com.capgemini.librarymanagement.controller;
+
+import java.util.Date;
+import java.util.Scanner;
+
+import com.capgemini.librarymanagement.LibraryMainPage;
+import com.capgemini.librarymanagement.dao.AdminBookDao;
+import com.capgemini.librarymanagement.dao.AdminBookDaoImpl;
+import com.capgemini.librarymanagement.db.DbStore;
+import com.capgemini.librarymanagement.dto.BookInfo;
+import com.capgemini.librarymanagement.dto.UserBookDetail;
+import com.capgemini.librarymanagement.dto.UserInfoBean;
+import com.capgemini.librarymanagement.exception.BookGenericException;
+import com.capgemini.librarymanagement.service.UserService;
+import com.capgemini.librarymanagement.service.UserServiceImpl;
+import com.capgemini.librarymanagement.validation.LibraryManageValidation;
+
+public class UserController {
+
+	UserService userService = new UserServiceImpl();
+	Scanner scanner = new Scanner(System.in);
+
+	public void user() {
+		System.out.println("User login successfully");
+		while (true) {
+			System.out.println("Enter your choice");
+			System.out.println("1.Search Book\n2.Logout");
+			int choice = scanner.nextInt();
+			switch (choice) {
+			case 1:
+				displaySearchBookWithName();
+				break;
+			case 2:
+				System.out.println("Logout Successfull");
+				LibraryMainPage.mainPage(null);
+				DbStore.user.clear();
+
+				break;
+
+			}
+		}
+	}
+
+
+	private void displaySearchBookWithName() {
+		System.out.println("Search Based on Book Name");
+		String name = scanner.next();
+		LibraryManageValidation searchValidation = new LibraryManageValidation();
+
+		if (searchValidation.bookValidation(name)) {
+			BookInfo book = userService.searchBookWithName(name);
+			if (book != null) {
+				System.out.println("Book Name:"+book.getBookName());
+				System.out.println("Book Author Name:"+book.getBookAuthor());
+				System.out.println("Publisher Name:"+book.getPublisher());
+				UserInfoBean bean = new UserInfoBean();
+				System.out.println("1.Borrow\n2.Return Book\n3.Logout\n");
+				int choice = scanner.nextInt();
+				switch (choice) {
+
+				case 1:
+					if (barrow(book, bean)) {
+						System.out.println(" Book request sent successfully");
+						try {
+							System.out.println("Your Book Request is on proccessing");
+							Thread.sleep(10000);
+							AdminBookDao adminBookDaoImpl = new AdminBookDaoImpl();
+							adminBookDaoImpl.requestPass();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					} else {
+						System.out.println("unable to send Request");
+					}
+
+					break;
+				case 2:
+					System.out.println("Enter return date");
+					String date = scanner.next();
+					if (userService.bookReturn(date)) {
+						System.out.println("Book Return Request Sent Successfully");
+						System.out.println("Your Book Request is on proccessing");
+						try {
+							Thread.sleep(10000);
+							AdminBookDao adminBookDaoImpl = new AdminBookDaoImpl();
+							adminBookDaoImpl.bookRecieve();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					} else {
+						System.out.println("Unable to send book return request");
+
+					}
+					break;
+				case 3:
+					System.out.println("Logout Successfull");
+					LibraryMainPage.mainPage(null);
+					DbStore.user.clear();
+
+				default:
+					break;
+				}
+			}
+		} else {
+			try {
+				throw new BookGenericException("Invalid Name");
+			} catch (BookGenericException e) {
+				System.out.println(e.getMessage());
+			}
+
+		}
+
+	}
+
+	public boolean barrow(BookInfo book, UserInfoBean bean) {
+
+		if (userService.requestCheck(book, bean)) {
+			return true;
+
+		} else {
+			return false;
+		}
+
+	}
+
+}

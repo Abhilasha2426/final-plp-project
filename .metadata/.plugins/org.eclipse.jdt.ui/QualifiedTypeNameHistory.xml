@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="java.lang.Thread"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.dao.AdminBookDaoImpl"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.dao.AdminBookDao"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.dto.UserInfoBean"/>
+<fullyQualifiedTypeName name="java.util.regex.Matcher"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.exception.BookGenericException"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.validation.LibraryManageValidation"/>
+<fullyQualifiedTypeName name="java.lang.RuntimeException"/>
+<fullyQualifiedTypeName name="lombok.Data"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.exception.DateValidationException"/>
+<fullyQualifiedTypeName name="org.junit.jupiter.api.Test"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.dao.UserDAO"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.dao.UserDAOImpl"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.service.UserService"/>
+<fullyQualifiedTypeName name="com.capgemini.librarymanagement.service.UserServiceImpl"/>
+</qualifiedTypeNameHistroy>
